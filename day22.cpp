@@ -38,19 +38,16 @@ void solve_first(Deck& player1, Deck& player2) {
 }
 
 void solve_second(Deck& player1, Deck& player2) {
-  std::set<string> games;
-  Deck& winner = playGameRec(player1, player2, games);
+  GameStates games;
+  int winner = playGameRec(player1, player2, games);
 
   cout << "Part2: ";
-  cout << winner.get_score();
+  cout << (winner == 0 ? player1.get_score() : player2.get_score());
   cout << endl;
 }
 
-std::string getGameState(Deck& player1, Deck& player2) {
-  std::string s1 = player1.get_hash();
-  std::string s2 = player2.get_hash();
-
-  return s1+":"+s2;
+string getGameState(Deck& player1, Deck& player2) {
+  return player1.get_hash() + ":" + player2.get_hash();
 }
 
 
@@ -88,11 +85,11 @@ void playRound(Deck &player1, Deck &player2) {
   }
 }
 
-Deck& playGameRec(Deck &player1, Deck &player2, set<string> &games) {
+int playGameRec(Deck &player1, Deck &player2, GameStates &games) {
   while (player1.has_cards() && player2.has_cards()) {
-    std::string gameState = getGameState(player1, player2);
+     string gameState = getGameState(player1, player2);
     if (games.count(gameState)) {
-      return player1;
+      return 0;
     }
     games.insert(gameState);
 
@@ -100,14 +97,14 @@ Deck& playGameRec(Deck &player1, Deck &player2, set<string> &games) {
   }
 
   if (player1.has_cards()) {
-   return player1;
+   return 0;
   } else {
-    return player2;
+    return 1;
   }
 }
 
 
-Deck& playRound(Deck &player1, Deck &player2, set<string> &games) {
+int playRound(Deck &player1, Deck &player2, GameStates &games) {
   int card1 = player1.draw_top();
   int card2 = player2.draw_top();
   if (player1.get_cards_amount() < card1 || player2.get_cards_amount() < card2) {
@@ -115,20 +112,20 @@ Deck& playRound(Deck &player1, Deck &player2, set<string> &games) {
       player1.insert_to_bottom(card1);
       player1.insert_to_bottom(card2);
 
-      return player1;
+      return 0;
     } else {
       player2.insert_to_bottom(card2);
       player2.insert_to_bottom(card1);
 
-      return player2;
+      return 1;
     }
   }
 
   Deck new_deck_1 = player1.get_new_deck(card1);
   Deck new_deck_2 = player2.get_new_deck(card2);
-  std::set<string> newGames;
-  Deck& winner = playGameRec(new_deck_1, new_deck_2, newGames);
-  if (&winner == &new_deck_1) {
+  GameStates newGames;
+  int winner = playGameRec(new_deck_1, new_deck_2, newGames);
+  if (winner == 0) {
     player1.insert_to_bottom(card1);
     player1.insert_to_bottom(card2);
   } else {

@@ -44,15 +44,6 @@ int Deck::get_cards_amount() {
 }
 
 Deck Deck::get_new_deck(int limit) {
-  std::vector<int> cards;
-  int step = 0;
-  for (int i : deck) {
-    cards.push_back(i);
-    step++;
-    if (step == limit) {
-      break;
-    }
-  }
-
-  return Deck(cards);
+  std::vector<int> a(begin(deck), begin(deck)+limit);
+  return Deck(a);
 }

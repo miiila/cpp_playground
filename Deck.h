@@ -4,7 +4,7 @@
 
 
 #include <vector>
-#include <list>
+#include <deque>
 #include <string>
 
 
@@ -28,8 +28,7 @@ public:
   std::string get_hash();
 
 private:
-  Deck(int limit);
-  std::list<int> deck;
+  std::deque<int> deck;
 };
 
 #endif //INTRO_DECK_H
