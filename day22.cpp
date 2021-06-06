@@ -46,8 +46,8 @@ void solve_second(Deck& player1, Deck& player2) {
   cout << endl;
 }
 
-string getGameState(Deck& player1, Deck& player2) {
-  return player1.get_hash() + ":" + player2.get_hash();
+unsigned long getGameState(Deck& player1, Deck& player2) {
+  return player1.get_hash() ^ player2.get_hash();
 }
 
 
@@ -87,7 +87,7 @@ void playRound(Deck &player1, Deck &player2) {
 
 int playGameRec(Deck &player1, Deck &player2, GameStates &games) {
   while (player1.has_cards() && player2.has_cards()) {
-     string gameState = getGameState(player1, player2);
+    unsigned long gameState = getGameState(player1, player2);
     if (games.count(gameState)) {
       return 0;
     }

@@ -31,12 +31,14 @@ bool Deck::has_cards() {
   return !deck.empty();
 }
 
-std::string Deck::get_hash() {
- std::string hash;
- for (auto i : deck) {
-   hash += std::to_string(i);
- }
- return hash;
+unsigned long Deck::get_hash() {
+  unsigned long int h = 0;
+  int it = -1;
+  for (auto i : deck) {
+    h = (h << ++it) ^ i;
+  }
+
+  return h;
 }
 
 int Deck::get_cards_amount() {

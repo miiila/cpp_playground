@@ -25,7 +25,7 @@ public:
 
   Deck get_new_deck(int limit);
 
-  std::string get_hash();
+  unsigned long get_hash();
 
 private:
   std::deque<int> deck;
